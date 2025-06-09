@@ -91,14 +91,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    const data = form.getValues();
     try {
       if (type === "sign-up") {
         const { name, email, password } = data;
-
         try {
           const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -138,7 +135,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         }
       } else {
         const { email, password } = data;
-
         try {
           const userCredential = await signInWithEmailAndPassword(
             auth,
@@ -270,7 +266,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           </div>
 
           <motion.form
-            onSubmit={handleSubmit}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 sm:space-y-6 relative z-10"
             initial="hidden"
             animate="visible"
